@@ -1,0 +1,29 @@
+.articles {
+    display: flex;
+}
+
+.articles div {
+    padding-left: 50px;
+    display: flex;
+    align-items: center;
+    width: 900px;
+    height: 150px;
+}
+
+.articles img {
+    padding-right: 10px;
+    width: 200px;
+    height: 100px;
+}
+
+.but {
+    display: flex;
+    justify-content: center;
+}
+
+.but button {
+    width: 100px;
+    height: 30px;
+}
+
+
