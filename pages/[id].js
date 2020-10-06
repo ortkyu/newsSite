@@ -7,7 +7,6 @@ import s from '../styles/article.module.css'
 import * as firebase from "firebase";
 
 
-
 const config = {
     apiKey: "AIzaSyDOqR7wKjUdqKs25dNO9NkTmhAxfbTKAGg",
     authDomain: "newsarticles-1ce5d.firebaseapp.com",
@@ -24,47 +23,46 @@ if (!firebase.apps.length) {
 export default function Article() {
 
 
-    const  [articles, setArticle] = useState([])
+    const [articles, setArticle] = useState([])
     const router = useRouter()
     console.log(router)
 
     useEffect(() => {
-      /*  fetch(`https://newsarticles-1ce5d.firebaseio.com/articles/${router.query.id}.json`)
-            .then(response => response.json())
-            .then(data => setArticle(data))*/
+        /*  fetch(`https://newsarticles-1ce5d.firebaseio.com/articles/${router.query.id}.json`)
+              .then(response => response.json())
+              .then(data => setArticle(data))*/
 
         let ref = firebase.database().ref(`articles/${router.query.id}`)
         ref.on("value", function (snapshot) {
             setArticle(snapshot.val());
         });
     }, [router.query.id])
-
-    let addComment =(e)=>e
-    const  handleSubmit = (event) => {
+k
+    let addComment = (e) => e
+    const handleSubmit = (event) => {
         alert(comment);
         addComment(comment)
         PostComment(comment)
         event.preventDefault();
     }
 
-    const  [comment, setComment] = useState('')
-   let commentDate = new Date().toLocaleDateString()
+    const [comment, setComment] = useState('')
+    let commentDate = new Date().toLocaleDateString()
     const PostComment = async (comment) => {
 
-            /*let response = await fetch(`https://newsarticles-1ce5d.firebaseio.com/articles/${router.query.id}/comments.json`, {
-                method: 'POST',
-                body: JSON.stringify({comment})
-            })
-            let result = await response.text();
-            alert(result);*/
+        /*let response = await fetch(`https://newsarticles-1ce5d.firebaseio.com/articles/${router.query.id}/comments.json`, {
+            method: 'POST',
+            body: JSON.stringify({comment})
+        })
+        let result = await response.text();
+        alert(result);*/
 
         let ref = firebase.database().ref(`articles/${router.query.id}/comments`)
         ref.push({comment, commentDate});
-        }
+    }
 
 
-
-    let commentText = articles&&articles.comments && Object.entries(articles.comments).map(c=>c[1])
+    let commentText = articles && articles.comments && Object.entries(articles.comments).map(c => c[1])
 
 
     if (!articles) {
@@ -91,11 +89,11 @@ export default function Article() {
                         {addComment}
                     </div>
                     <div>
-                    {commentText && commentText.map(c =>
-                        <div>
-                        {c.comment}
-                        {c.commentDate}
-                        </div>
+                        {commentText && commentText.map(c =>
+                            <div>
+                                {c.comment}
+                                {c.commentDate}
+                            </div>
                         )}
                     </div>
                 </div>
@@ -103,8 +101,6 @@ export default function Article() {
         </MainLayout>
     )
 }
-
-
 
 
 export async function getServerSideProps() {
