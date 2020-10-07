@@ -25,7 +25,6 @@ export default function Article() {
 
     const [articles, setArticle] = useState([])
     const router = useRouter()
-    console.log(router)
 
     useEffect(() => {
         /*  fetch(`https://newsarticles-1ce5d.firebaseio.com/articles/${router.query.id}.json`)
@@ -37,19 +36,18 @@ export default function Article() {
             setArticle(snapshot.val());
         });
     }, [router.query.id])
-k
-    let addComment = (e) => e
+
+
     const handleSubmit = (event) => {
         alert(comment);
-        addComment(comment)
         PostComment(comment)
         event.preventDefault();
     }
 
-    const [comment, setComment] = useState('')
+    const [comment, setComment] = useState([])
+    const [nameComment, setName] = useState([])
     let commentDate = new Date().toLocaleDateString()
     const PostComment = async (comment) => {
-
         /*let response = await fetch(`https://newsarticles-1ce5d.firebaseio.com/articles/${router.query.id}/comments.json`, {
             method: 'POST',
             body: JSON.stringify({comment})
@@ -58,12 +56,12 @@ k
         alert(result);*/
 
         let ref = firebase.database().ref(`articles/${router.query.id}/comments`)
-        ref.push({comment, commentDate});
+        ref.push({comment, nameComment, commentDate});
     }
 
 
     let commentText = articles && articles.comments && Object.entries(articles.comments).map(c => c[1])
-
+debugger
 
     if (!articles) {
         return <MainLayout>
@@ -78,24 +76,27 @@ k
                     <hr/>
                     <ReactMarkdown source={articles.body} escapeHtml={false}/>
                     <hr/>
+                    <span>Комментарии:</span>
                     <form onSubmit={handleSubmit}>
-                        <label>
-                            Комментарии:
-                            <textarea onChange={e => setComment(e.target.value)}/>
-                        </label>
-                        <input type="submit" value="Отправить"/>
+                        <input placeholder={'введите ваше имя'} type="text" onChange={e => setName(e.target.value)}/>
+                        <div>
+                            <textarea placeholder={'напишите ваш комментарий'} onChange={e => setComment(e.target.value)}/>
+                        </div>
+                            <input type="submit" value="Отправить"/>
                     </form>
-                    <div>
-                        {addComment}
-                    </div>
-                    <div>
-                        {commentText && commentText.map(c =>
+                    {commentText && commentText.map(c =>
+                        <>
+                            <span>
+                            {c.nameComment}
+                        <small>
+                        {c.commentDate}
+                        </small>
+                                 </span>
                             <div>
                                 {c.comment}
-                                {c.commentDate}
                             </div>
+                        </>
                         )}
-                    </div>
                 </div>
             </div>
         </MainLayout>
