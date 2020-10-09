@@ -34,8 +34,6 @@ export function MainLayout({ children, title}) {
         }
         
         main {
-          
-          margin-top: 60px;
           padding: 1rem;
         }
       `}</style>

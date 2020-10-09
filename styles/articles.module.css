@@ -1,19 +1,108 @@
-.articles {
+.wrapper {
     display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.articles {
+    width: 90%;
+    align-items: center;
 }
 
 .articles div {
     padding-left: 50px;
     display: flex;
-    align-items: center;
-    width: 900px;
-    height: 150px;
+    align-content: center;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.dt {
+    display: flex;
+    flex-direction: column;
+    padding-left: 8px;
 }
 
 .articles img {
-    padding-right: 10px;
+    padding-right: 3px;
     width: 200px;
     height: 100px;
+}
+
+@media all and (max-width: 450px) {
+    .wrapper {
+        align-content: center;
+    }
+    .articles div {
+        justify-content: center;
+        padding-left: 3px;
+        border: 1px solid grey;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .articles div img {
+        height: auto;
+        width: 100%;
+    }
+}
+
+.topWrapper {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.articlesTop {
+    width: 100%;
+    display: flex;
+    height: auto;
+    padding-left: 50px;
+    margin-bottom: 45px;
+}
+
+.articlesTop div {
+    display: flex;
+align-items: center;
+}
+
+.topDate {
+    display: flex;
+    flex-direction: column;
+    padding-left: 8px;
+}
+
+.articlesTop img {
+    padding-right: 3px;
+    width: auto;
+    height: 250px;
+}
+
+@media all and (max-width: 800px) {
+    .topWrapper {
+        align-content: center;
+    }
+    .articlesTop {
+        justify-content: center;
+        padding-left: 3px;
+        border: 1px solid grey;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    .articlesTop div {
+        display: flex;
+        flex-direction: column;
+    }
+    .articlesTop div img {
+        height: auto;
+        width: 100%;
+    }
+}
+
+.tit {
+    padding-left: 50px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
 }
 
 .but {

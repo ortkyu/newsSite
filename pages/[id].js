@@ -5,6 +5,7 @@ import {useRouter} from 'next/router'
 import ReactMarkdown from 'react-markdown'
 import s from '../styles/article.module.css'
 import * as firebase from "firebase";
+import {useForm} from "react-hook-form";
 
 
 const config = {
@@ -37,26 +38,19 @@ export default function Article() {
         });
     }, [router.query.id])
 
-
-    const handleSubmit = (event) => {
-        alert(comment);
-        PostComment(comment)
-        event.preventDefault();
+    const { register, handleSubmit,  errors } = useForm();
+    const onSubmit = (data) => {
+        let {author} = data
+        let {comment} = data
+        PostComment(author, comment)
     }
 
-    const [comment, setComment] = useState([])
-    const [nameComment, setName] = useState([])
     let commentDate = new Date().toLocaleDateString()
-    const PostComment = async (comment) => {
-        /*let response = await fetch(`https://newsarticles-1ce5d.firebaseio.com/articles/${router.query.id}/comments.json`, {
-            method: 'POST',
-            body: JSON.stringify({comment})
-        })
-        let result = await response.text();
-        alert(result);*/
+    const PostComment = async (author, comment) => {
+
 
         let ref = firebase.database().ref(`articles/${router.query.id}/comments`)
-        ref.push({comment, nameComment, commentDate});
+        ref.push({author, comment, commentDate});
     }
 
 
@@ -73,21 +67,32 @@ debugger
         <MainLayout>
             <div className={s.container}>
                 <div>
+                    <div className={s.content}>
                     <hr/>
                     <ReactMarkdown source={articles.body} escapeHtml={false}/>
                     <hr/>
+                    </div>
                     <span>Комментарии:</span>
-                    <form onSubmit={handleSubmit}>
-                        <input placeholder={'введите ваше имя'} type="text" onChange={e => setName(e.target.value)}/>
+                    <form onSubmit={handleSubmit(onSubmit)} className={{errors} && s.form}>
+                        {errors.author && <p>"имя должно содержать от 2 до 20 символов"</p>}
+                       {errors.comment &&  <p>"комментарий должен содержать не менее 5 символов"</p>}
+                        <input size="28" name = "author" placeholder={'введите ваше имя'} type="text" ref={register({
+                            required: true,
+                            minLength: 2,
+                            maxLength: 30
+                        })}/>
                         <div>
-                            <textarea placeholder={'напишите ваш комментарий'} onChange={e => setComment(e.target.value)}/>
+                            <textarea rows="3" cols="30" name = "comment" placeholder={'напишите ваш комментарий'} ref={register({
+                                required: true,
+                                minLength: 5
+                            })}/>
                         </div>
-                            <input type="submit" value="Отправить"/>
+                            <input  type="submit" value="Отправить"/>
                     </form>
                     {commentText && commentText.map(c =>
-                        <>
+                        <div className={s.blockComment}>
                             <span>
-                            {c.nameComment}
+                            {c.author}
                         <small>
                         {c.commentDate}
                         </small>
@@ -95,7 +100,7 @@ debugger
                             <div>
                                 {c.comment}
                             </div>
-                        </>
+                        </div>
                         )}
                 </div>
             </div>
@@ -106,7 +111,7 @@ debugger
 
 export async function getServerSideProps() {
 
-    const response = await fetch(`https://newsarticles-1ce5d.firebaseio.com/articles.json?orderBy="$key"&limitToFirst=3`)
+    const response = await fetch(`https://newsarticles-1ce5d.firebaseio.com/articles.json?orderBy="$key"&limitToLast=3`)
     const serverArticles = await response.json()
 
     return {props: {serverArticles}}
