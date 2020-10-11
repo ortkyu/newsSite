@@ -1,6 +1,7 @@
 import React, {useContext, useReducer} from 'react'
 
 
+
 const ArticlecContext = React.createContext();
 
 export const useArticles = () => {
@@ -33,10 +34,4 @@ export const ArticleProvider = ({children}) => {
             {children}
         </ArticlecContext.Provider>
     )
-
-
-
-
-
-
 }
