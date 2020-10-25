@@ -3,57 +3,41 @@ import {MainLayout} from '../components/MainLayout'
 import {useState} from "react";
 import Head from "next/head";
 import s from "../styles/articles.module.css";
-import *as firebase from "firebase";
 import {useArticles} from "../components/articlecContext";
 
-const config = {
-    apiKey: "AIzaSyDOqR7wKjUdqKs25dNO9NkTmhAxfbTKAGg",
-    authDomain: "newsarticles-1ce5d.firebaseapp.com",
-    databaseURL: "https://newsarticles-1ce5d.firebaseio.com",
-    projectId: "newsarticles-1ce5d",
-    storageBucket: "newsarticles-1ce5d.appspot.com",
-    messagingSenderId: "508455689534",
-    appId: "1:508455689534:web:64cc76ab48654ddea7e06f"
-}
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(config)
-}
 
 export default function Index ({serverArticles}) {
-    const {articles} = useArticles()
-    const {addArticles} = useArticles()
-
-
+    const {articles, addArticles} = useArticles()
 
     let loadArticles = () => {
-        fetch('https://newsarticles-1ce5d.firebaseio.com/articles.json?orderBy="$key"&limitToLast=3')
+        fetch('http://localhost:5000/')
             .then(response => response.json())
             .then(data => addArticles(Object.values(data)))
     }
 
-    if (articles.length<1 && serverArticles) {
+    if (articles.length < 1 && serverArticles) {
         addArticles(Object.values(serverArticles))
     } else if (articles.length<1 && !serverArticles) {
         loadArticles()
     }
-    let startId = articles[articles.length - 1] && articles[articles.length - 1].id - 1
+    let startId = articles[articles.length - 1] && articles[articles.length - 1].idArticle - 1
 
 
     const [disableButton, setDisable] = useState(false)
 
     async function moreArticles() {
-        let articleRef = await firebase.database().ref('articles').orderByChild('id').endAt(startId).limitToLast(3)
-        articleRef.on('value' ,async function f(snapshot)  {
-            if (snapshot.val()) {
-            let newArticles = await Object.values(snapshot.val())
-                debugger
-                addArticles(newArticles)
-            } else {
-               setDisable(true)
-            }
-        })
+        fetch(`http://localhost:5000/more${startId}`)
+            .then(response => response.json())
+            .then(articlesData => {
+                if (articlesData.length > 0) {
+                    addArticles(articlesData)
+                } else {
+                    setDisable(true)
+                }
+            })
     }
+
 
    let [topArticles, ...allArticles] = articles
 
@@ -85,7 +69,7 @@ export default function Index ({serverArticles}) {
               <articles>
                   <div className={s.topWrapper}>
                       <div className={s.articlesTop}>
-                          <Link href={`/[id]`} as={`/${topArticles.id}`}>
+                          <Link href={`/[id]`} as={`/${topArticles.idArticle}`}>
                               <div>
                                   <img src={topArticles.photo}/>
                                   <dl className={s.topDate}>
@@ -99,7 +83,7 @@ export default function Index ({serverArticles}) {
                   {allArticles && allArticles.map(article =>
                       <div className={s.wrapper}>
                           <div className={s.articles}>
-                              <Link href={`/[id]`} as={`/${article.id}`}>
+                              <Link href={`/[id]`} as={`/${article.idArticle}`}>
                                   <div>
                                       <img src={article.photo}/>
                                       <dl className={s.dt}>
@@ -122,10 +106,10 @@ export default function Index ({serverArticles}) {
 }
 
 
-export async function getServerSideProps() {
+/*export async function getServerSideProps() {
     const response = await fetch(`https://newsarticles-1ce5d.firebaseio.com/articles.json?orderBy="$key"&limitToLast=3`)
     const serverArticles = await response.json()
 
     return {props: {serverArticles}}
-}
+}*/
 

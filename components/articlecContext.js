@@ -11,9 +11,9 @@ export const useArticles = () => {
 const ADD_ARTICLE = 'addArticles'
 
 const reducer = (state, action) => {
-debugger
+
     switch (action.type) {
-        case ADD_ARTICLE: return {...state, articles: [...state.articles, ...action.newArticles.reverse()]}
+        case ADD_ARTICLE: return {...state, articles: [...state.articles, ...action.newArticles]}  //...action.newArticles.reverse()
         default: return state
     }
 }
