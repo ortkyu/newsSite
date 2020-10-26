@@ -6,19 +6,18 @@ import s from "../styles/articles.module.css";
 import {useArticles} from "../components/articlecContext";
 
 
-
-export default function Index ({serverArticles}) {
+export default function Index({serverArticles}) {
     const {articles, addArticles} = useArticles()
 
     let loadArticles = () => {
-        fetch('http://localhost:5000/')
+        fetch('https://floating-ocean-73818.herokuapp.com/')
             .then(response => response.json())
             .then(data => addArticles(Object.values(data)))
     }
 
     if (articles.length < 1 && serverArticles) {
         addArticles(Object.values(serverArticles))
-    } else if (articles.length<1 && !serverArticles) {
+    } else if (articles.length < 1 && !serverArticles) {
         loadArticles()
     }
     let startId = articles[articles.length - 1] && articles[articles.length - 1].idArticle - 1
@@ -27,7 +26,7 @@ export default function Index ({serverArticles}) {
     const [disableButton, setDisable] = useState(false)
 
     async function moreArticles() {
-        fetch(`http://localhost:5000/more${startId}`)
+        fetch(`https://floating-ocean-73818.herokuapp.com/more${startId}`)
             .then(response => response.json())
             .then(articlesData => {
                 if (articlesData.length > 0) {
@@ -106,10 +105,10 @@ export default function Index ({serverArticles}) {
 }
 
 
-/*export async function getServerSideProps() {
-    const response = await fetch(`https://newsarticles-1ce5d.firebaseio.com/articles.json?orderBy="$key"&limitToLast=3`)
+export async function getServerSideProps() {
+    const response = await fetch(`https://floating-ocean-73818.herokuapp.com/`)
     const serverArticles = await response.json()
 
     return {props: {serverArticles}}
-}*/
+}
 

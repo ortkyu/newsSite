@@ -14,7 +14,7 @@ export default function Article() {
     const router = useRouter()
 
     useEffect(() => {
-          fetch(`http://localhost:5000/${router.query.id}`)
+          fetch(`https://floating-ocean-73818.herokuapp.com/${router.query.id}`)
               .then(response => response.json())
               .then(data => setArticle(...data))
     }, [router.query.id])
@@ -29,11 +29,11 @@ export default function Article() {
         setCom({author, comment, commentDate})
         reset()
     }
-debugger
+
     let commentDate = new Date().toLocaleDateString()
     let idAr = router.query.id
     const PostComment = async (author, comment) => {
-            await fetch(`http://localhost:5000`, {
+            await fetch(`https://floating-ocean-73818.herokuapp.com/`, {
                 method: 'POST',
                 headers:{'Content-Type': 'application/json'},
                 body: JSON.stringify({comment, idAr, author, commentDate})
@@ -41,7 +41,6 @@ debugger
     }
 
     let commentText = articles && articles.comments && Object.entries(articles.comments).map(c => c[1])
-
 
     if (!articles) {
         return <MainLayout>
@@ -89,7 +88,7 @@ debugger
                         </div>
                         <input type="submit" value="Отправить"/>
                     </form>
-                    { com.author &&
+                    {com.author &&
                     <div className={s.blockComment}>
                             <span>
                             {com.author}
@@ -124,7 +123,7 @@ debugger
 
 export async function getServerSideProps() {
 
-    const response = await fetch(`https://newsarticles-1ce5d.firebaseio.com/articles.json?orderBy="$key"&limitToLast=3`)
+    const response = await fetch(`https://floating-ocean-73818.herokuapp.com/`)
     const serverArticles = await response.json()
 
     return {props: {serverArticles}}
