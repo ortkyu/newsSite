@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import Head from 'next/head'
+import React from "react";
 
 export function MainLayout({ children, title}) {
     return (
         <>
             <Head >
-                <title>{title}|news</title>
+                <title>{title}| Новости из мира науки и техники</title>
+                <meta name="description" content="Самые последние новости из мира науки и техники, открытия, исследования и изобретения" />
             </Head>
             <nav>
                 <Link href={'/'}><a><h1>TECHNO</h1></a></Link>

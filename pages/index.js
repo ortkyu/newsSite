@@ -49,7 +49,6 @@ export default function Index({serverArticles}) {
   return (
       <MainLayout>
           <Head>
-              <title>Техно новости</title>
               <title>Новости из мира науки и техники</title>
               <meta name="description" content="Самые последние новости из мира науки и техники, открытия, исследования и изобретения" />
                <script
@@ -97,8 +96,8 @@ export default function Index({serverArticles}) {
                   )}
               </articles>
           <div className={s.but}>
-              <button  disabled={disableButton} onClick={moreArticles}>Еще статьи</button>
               {disableButton && <p>Статей больше нет</p> }
+              <button  disabled={disableButton} onClick={moreArticles}>Еще статьи</button>
           </div>
           </div>
       </MainLayout>
