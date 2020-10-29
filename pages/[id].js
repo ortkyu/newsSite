@@ -9,16 +9,22 @@ import Head from "next/head";
 
 
 
-export default function Article() {
+export default function Article({serverArticles}) {
 
     const [articles, setArticle] = useState([])
     const router = useRouter()
 
-    useEffect(() => {
-          fetch(`https://floating-ocean-73818.herokuapp.com/${router.query.id}`)
-              .then(response => response.json())
-              .then(data => setArticle(...data))
-    }, [router.query.id])
+    let loadArticles = () => {
+        fetch(`https://floating-ocean-73818.herokuapp.com/${router.query.id}`)
+            .then(response => response.json())
+            .then(data => setArticle(...data))
+    }
+
+    if (articles.length < 1 && serverArticles) {
+        setArticle(...serverArticles)
+    } else if (articles.length < 1 && !serverArticles) {
+        loadArticles()
+    }
 
     const [com, setCom] = useState({})
 
@@ -41,9 +47,7 @@ export default function Article() {
         })
     }
 
-    let commentText = articles && articles.comments && Object.entries(articles.comments).map(c => c[1])
-
-    if (!articles) {
+    if (articles.length < 1) {
         return <MainLayout>
             <p>Подождите ...</p>
         </MainLayout>
@@ -102,7 +106,7 @@ export default function Article() {
                         </div>
                     </div>
                     }
-                    {commentText && commentText.map(c =>
+                    {articles.comments && articles.comments.map(c =>
                         <div className={s.blockComment}>
                             <span>
                             {c.author}
@@ -122,9 +126,9 @@ export default function Article() {
 }
 
 
-export async function getServerSideProps() {
+export async function getServerSideProps(router) {
 
-    const response = await fetch(`https://floating-ocean-73818.herokuapp.com/`)
+    const response = await fetch(`https://floating-ocean-73818.herokuapp.com/${router.query.id}`)
     const serverArticles = await response.json()
 
     return {props: {serverArticles}}
