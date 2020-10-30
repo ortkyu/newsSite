@@ -9,6 +9,7 @@ export function MainLayout({ children, title}) {
                 <title>{title}| Новости из мира науки и техники</title>
                 <meta name="description" content="Самые последние новости из мира науки и техники, открытия, исследования и изобретения" />
                 <meta name="yandex-verification" content="5211a82e3d315328" />
+                <meta name="google-site-verification" content="v3Eb8IrFkCvDeUzwwccE6HlTfyi8CYbZtm_SmZChmIE" />
             </Head>
             <nav>
                 <Link href={'/'}><a><h1>TECHNO</h1></a></Link>
