@@ -57,7 +57,7 @@ export default function Article({serverArticles}) {
         <MainLayout>
             <Head>
                 <title>Техно новости</title>
-                <title>Новости из мира науки и техники</title>
+                <title>{articles.title}</title>
                 <meta name="description" content="Самые последние новости из мира науки и техники, открытия, исследования и изобретения" />
                 <script
                     dangerouslySetInnerHTML={{__html: `(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
