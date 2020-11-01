@@ -49,8 +49,8 @@ export default function Article({serverArticles}) {
 
     if (articles.length < 1) {
         return <MainLayout>
-            <p>Подождите ...</p>
-        </MainLayout>
+                  <p>Подождите ...</p>
+               </MainLayout>
     }
 
     return (
