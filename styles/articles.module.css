@@ -36,7 +36,7 @@
     .articles div {
         justify-content: center;
         padding-left: 3px;
-        border: 1px solid grey;
+        border-bottom: 1px solid grey;
         flex-wrap: wrap;
         align-items: center;
     }
@@ -62,7 +62,7 @@
 
 .articlesTop div {
     display: flex;
-align-items: center;
+    align-items: center;
 }
 
 .topDate {
@@ -84,7 +84,7 @@ align-items: center;
     .articlesTop {
         justify-content: center;
         padding-left: 3px;
-        border: 1px solid grey;
+        border-bottom: 1px solid grey;
         flex-wrap: wrap;
         align-items: center;
     }
