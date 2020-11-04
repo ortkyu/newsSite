@@ -6,12 +6,15 @@ import ReactMarkdown from 'react-markdown'
 import s from '../styles/article.module.css'
 import {useForm} from "react-hook-form";
 import Head from "next/head";
+import { ArticlePage } from '../interfaces/articlePages'
 
+interface ArticlesProps {
+    serverArticles: ArticlePage[]
+}
 
+export default function Article({serverArticles}: ArticlesProps) {
 
-export default function Article({serverArticles}) {
-
-    const [articles, setArticle] = useState([])
+    const [articles, setArticle] = React.useState<ArticlePage[]>([])
     const router = useRouter()
 
     let loadArticles = () => {
@@ -26,7 +29,7 @@ export default function Article({serverArticles}) {
         loadArticles()
     }
 
-    const [com, setCom] = useState({})
+    const [comment, setCom] = useState({})
 
     const { register, handleSubmit, errors, reset } = useForm();
     const onSubmit = (data) => {
@@ -93,16 +96,16 @@ export default function Article({serverArticles}) {
                         </div>
                         <input type="submit" value="Отправить"/>
                     </form>
-                    {com.author &&
+                    {comment.author &&
                     <div className={s.blockComment}>
                             <span>
-                            {com.author}
+                            {comment.author}
                                 <small>
-                        {com.commentDate}
+                        {comment.commentDate}
                         </small>
                                  </span>
                         <div>
-                            {com.comment}
+                            {comment.comment}
                         </div>
                     </div>
                     }

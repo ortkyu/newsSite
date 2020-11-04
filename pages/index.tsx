@@ -5,10 +5,16 @@ import {useState} from "react";
 import Head from "next/head";
 import s from "../styles/articles.module.css";
 import {useArticles} from "../components/articlecContext";
+import {Articles} from "../interfaces/articles";
 
 
-export default function Index({serverArticles}) {
-    const {articles, addArticles} = useArticles()
+
+interface ArticlesProps {
+    serverArticles: Articles[]
+}
+
+export default function Index({serverArticles}: ArticlesProps) {
+    const {newsArticles, addArticles} = useArticles()
 
     let loadArticles = () => {
         fetch('https://floating-ocean-73818.herokuapp.com/')
@@ -16,12 +22,12 @@ export default function Index({serverArticles}) {
             .then(data => addArticles(Object.values(data)))
     }
 
-    if (articles.length < 1 && serverArticles) {
+    if (newsArticles.length < 1 && serverArticles) {
         addArticles(Object.values(serverArticles))
-    } else if (articles.length < 1 && !serverArticles) {
+    } else if (newsArticles.length < 1 && !serverArticles) {
         loadArticles()
     }
-    let startId = articles[articles.length - 1] && articles[articles.length - 1].idArticle - 1
+    let startId = newsArticles[newsArticles.length - 1] && newsArticles[newsArticles.length - 1].idArticle - 1
 
 
     const [disableButton, setDisable] = useState(false)
@@ -39,9 +45,9 @@ export default function Index({serverArticles}) {
     }
 
 
-   let [topArticles, ...allArticles] = articles
+   let [topArticles, ...allArticles] = newsArticles
 
-    if (articles.length<1) {
+    if (newsArticles.length<1) {
         return <MainLayout>
                   <p>Подождите ...</p>
                </MainLayout>
