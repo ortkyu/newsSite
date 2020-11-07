@@ -67,6 +67,7 @@ export default function Index({serverArticles}: ArticlesProps) {
             accurateTrackBounce:true,
             webvisor:true
         });`}} />
+              <meta itemProp="image" content="https://img2.akspic.ru/image/29690-struktura-kosmos-tehnologia-elektronnaya_tehnika-tehnologii-1920x1080.jpg" />
           </Head>
           <noscript dangerouslySetInnerHTML={{__html: ` <div><img src="https://mc.yandex.ru/watch/68154151" style="position:absolute; left:-9999px;" alt="" /></div>`}}/>
           <div>
