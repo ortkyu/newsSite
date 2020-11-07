@@ -7,29 +7,30 @@ import s from '../styles/article.module.css'
 import {useForm} from "react-hook-form";
 import Head from "next/head";
 import { ArticlePage } from '../interfaces/articlePages'
+import { CommentArticle } from '../interfaces/commentArticle'
 
 interface ArticlesProps {
-    serverArticles: ArticlePage[]
+    serverArticles: ArticlePage
 }
 
-export default function Article({serverArticles}: ArticlesProps) {
+export default function Article({serverArticles}: ArticlesProps ) {
 
-    const [articles, setArticle] = React.useState<ArticlePage[]>([])
+    const [article, setArticle] = React.useState<ArticlePage | null>(null)
     const router = useRouter()
 
     let loadArticles = () => {
         fetch(`https://floating-ocean-73818.herokuapp.com/${router.query.id}`)
             .then(response => response.json())
-            .then(data => setArticle(...data))
+            .then(data => setArticle(data[0]))
     }
 
-    if (articles.length < 1 && serverArticles) {
-        setArticle(...serverArticles)
-    } else if (articles.length < 1 && !serverArticles) {
+    if (!article  && serverArticles) {
+        setArticle(serverArticles[0])
+    } else if (!article  && !serverArticles) {
         loadArticles()
     }
 
-    const [comment, setCom] = useState({})
+    const [comment, setCom] = React.useState<CommentArticle>({})
 
     const { register, handleSubmit, errors, reset } = useForm();
     const onSubmit = (data) => {
@@ -50,9 +51,9 @@ export default function Article({serverArticles}: ArticlesProps) {
         })
     }
 
-    if (articles.length < 1) {
+    if (!article) {
         return <MainLayout>
-                  <p>Подождите ...</p>
+            <p>...Подождите</p>
                </MainLayout>
     }
 
@@ -60,7 +61,7 @@ export default function Article({serverArticles}: ArticlesProps) {
         <MainLayout>
             <Head>
                 <title>Техно новости</title>
-                <title>{articles.title}</title>
+                <title>{article.title}</title>
                 <meta name="description" content="Самые последние новости из мира науки и техники, открытия, исследования и изобретения" />
                 <script
                     dangerouslySetInnerHTML={{__html: `(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -77,7 +78,7 @@ export default function Article({serverArticles}: ArticlesProps) {
                 <div>
                     <article className={s.content}>
                         <hr/>
-                        <ReactMarkdown source={articles.body} escapeHtml={false}/>
+                        <ReactMarkdown source={article.body} escapeHtml={false}/>
                         <hr/>
                     </article>
                     <span>Комментарии:</span>
@@ -109,7 +110,7 @@ export default function Article({serverArticles}: ArticlesProps) {
                         </div>
                     </div>
                     }
-                    {articles.comments && articles.comments.map(c =>
+                    {article.comments && article.comments.map(c =>
                         <div className={s.blockComment}>
                             <span>
                             {c.author}

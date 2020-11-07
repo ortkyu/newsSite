@@ -71,7 +71,7 @@ export default function Index({serverArticles}: ArticlesProps) {
           <noscript dangerouslySetInnerHTML={{__html: ` <div><img src="https://mc.yandex.ru/watch/68154151" style="position:absolute; left:-9999px;" alt="" /></div>`}}/>
           <div>
           <h1 className={s.tit}>Новости</h1>
-              <articles>
+              <div>
                   <div className={s.topWrapper}>
                       <div className={s.articlesTop}>
                           <Link href={`/[id]`} as={`/${topArticles.idArticle}`}>
@@ -100,7 +100,7 @@ export default function Index({serverArticles}: ArticlesProps) {
                           </div>
                       </div>
                   )}
-              </articles>
+              </div>
           <div className={s.but}>
               {disableButton && <p>Статей больше нет</p> }
               <button  disabled={disableButton} onClick={moreArticles}>Еще статьи</button>
