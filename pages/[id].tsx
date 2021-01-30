@@ -23,12 +23,14 @@ export default function Article({serverArticles}: ArticlesProps ) {
             .then(response => response.json())
             .then(data => setArticle(data[0]))
     }
-
-    if (!article  && serverArticles) {
-        setArticle(serverArticles[0])
-    } else if (!article  && !serverArticles) {
-        loadArticles()
-    }
+    useEffect(() => {
+        if (!article  && serverArticles) {
+            setArticle(serverArticles[0])
+        } else if (!article  && !serverArticles) {
+            loadArticles()
+        }
+    },[])
+   
 
     const [comment, setCom] = React.useState<CommentArticle>({})
 

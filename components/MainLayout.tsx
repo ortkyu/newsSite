@@ -27,7 +27,6 @@ export function MainLayout({children, title}: StandardComponentProps) {
             </main>
             <style jsx>{`
         nav {
-          
           font-weight: bold;
           height: 90px;
           left: 0;
@@ -38,12 +37,10 @@ export function MainLayout({children, title}: StandardComponentProps) {
           align-items: center;
           padding-left: 5rem;
         }
-        
         nav a {
           color: #fff;
           text-decoration: none;
         }
-        
         main {
           padding: 1rem;
         }
