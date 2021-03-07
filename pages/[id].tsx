@@ -15,7 +15,7 @@ import {CommentArticle} from "../store/article/types"
 
 
 
-export default function Article( ) {
+export default function Article () {
 
     const router = useRouter()
 
@@ -45,15 +45,16 @@ export default function Article( ) {
         })
     }
 
-    if (!article) {
-        return <MainLayout>
-            <p>...Подождите</p>
-               </MainLayout>
-    }
+    // if (!article) {
+    //     return <MainLayout>
+    //         <p>...Подождите</p>
+    //            </MainLayout>
+    // }
 
     return (
+        <>
         <MainLayout>
-            <Head>
+            {/* <Head>
                 <title>Техно новости</title>
                 <title>{article.title}</title>
                 <meta name="description" content="Самые последние новости из мира науки и техники, открытия, исследования и изобретения" />
@@ -67,7 +68,11 @@ export default function Article( ) {
             accurateTrackBounce:true,
             webvisor:true
         });`}} />
-            </Head>
+            </Head> */}
+            {!article 
+            ? 
+            <div>Loading...</div>
+            :
             <div className={s.container}>
                 <div>
                     <article className={s.content}>
@@ -118,8 +123,9 @@ export default function Article( ) {
                         </div>
                     )}
                 </div>
-            </div>
+            </div>}
         </MainLayout>
+        </>
     )
 }
 
