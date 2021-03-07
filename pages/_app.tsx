@@ -1,15 +1,18 @@
 import '../styles/globals.css'
-import {ArticleProvider} from "../components/articlecContext";
-
+import { Provider } from "react-redux";
+import { useStore } from "../store";
 
 
 
 
 export default function App({ Component, pageProps }) {
+
+    const store = useStore(pageProps.initialReduxState);
+
     return(
-        <ArticleProvider>
+        <Provider store={store}>
            <Component {...pageProps} />
-        </ArticleProvider>
+        </Provider>
     )
 }
 

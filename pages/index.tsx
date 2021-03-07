@@ -1,49 +1,31 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { MainLayout } from "../components/MainLayout";
-import { useState } from "react";
 import Head from "next/head";
 import s from "../styles/articles.module.css";
-import { useArticles } from "../components/articlecContext";
-import { Articles } from "../interfaces/articles";
+import { useSelector, useDispatch } from "react-redux";
+import { initializeStore } from "../store";
+import { GetServerSideProps } from 'next'
+import { RootState } from '../store/reducers';
+import {addArticlesAll, addMoreArticlesAll} from "../store/articles/action"
+import {useRouter} from 'next/router'
 
-interface ArticlesProps {
-  serverArticles: Articles[];
-}
 
-export default function Index({ serverArticles }: ArticlesProps) {
-  const { newsArticles, addArticles } = useArticles();
+export default function Index() {
+  const dispatch = useDispatch();
+  const router = useRouter()
 
-  let loadArticles = () => {
-    fetch("https://floating-ocean-73818.herokuapp.com/")
-      .then((response) => response.json())
-      .then((data) => addArticles(Object.values(data)));
-  };
+  const newsArticles = useSelector((state: RootState) => state.articles.allArticles )
+  const disableButton = useSelector((state: RootState) => state.articles.disableButtonMoreLoad )
 
-  useEffect(() => {
-    if (newsArticles.length < 1 && serverArticles) {
-      addArticles(Object.values(serverArticles));
-    } else if (newsArticles.length < 1 && !serverArticles) {
-      loadArticles();
-    }
-  })
-  
+
   let startId =
     newsArticles[newsArticles.length - 1] &&
     newsArticles[newsArticles.length - 1].idArticle - 1;
 
-  const [disableButton, setDisable] = useState(false);
 
   async function moreArticles() {
-    fetch(`https://floating-ocean-73818.herokuapp.com/more${startId}`)
-      .then((response) => response.json())
-      .then((articlesData) => {
-        if (articlesData.length > 0) {
-          addArticles(articlesData);
-        } else {
-          setDisable(true);
-        }
-      });
+    dispatch(addMoreArticlesAll(startId))
   }
 
   let [topArticles, ...allArticles] = newsArticles;
@@ -55,6 +37,8 @@ export default function Index({ serverArticles }: ArticlesProps) {
       </MainLayout>
     );
   }
+
+
   return (
     <MainLayout>
       <Head>
@@ -91,7 +75,9 @@ export default function Index({ serverArticles }: ArticlesProps) {
         <div>
           <div className={s.topWrapper}>
             <div className={s.articlesTop}>
-              <Link href={`/[id]`} as={`/${topArticles.idArticle}`}>
+            <Link
+                href={`/${topArticles.idArticle}`}
+            >
                 <div>
                   <img src={topArticles.photo} />
                   <dl className={s.topDate}>
@@ -106,9 +92,9 @@ export default function Index({ serverArticles }: ArticlesProps) {
           </div>
           {allArticles &&
             allArticles.map((article) => (
-              <div className={s.wrapper}>
+              <div key={article.idArticle} className={s.wrapper}>
                 <div className={s.articles}>
-                  <Link href={`/[id]`} as={`/${article.idArticle}`}>
+                  <Link href={`/${article.idArticle}`}>
                     <div>
                       <img src={article.photo} />
                       <dl className={s.dt}>
@@ -132,9 +118,12 @@ export default function Index({ serverArticles }: ArticlesProps) {
   );
 }
 
-export async function getServerSideProps() {
-  const response = await fetch(`https://floating-ocean-73818.herokuapp.com/`);
-  const serverArticles = await response.json();
 
-  return { props: { serverArticles } };
+export async function getServerSideProps() {
+  const reduxStore = initializeStore();
+  const { dispatch } = reduxStore;
+
+  await dispatch(addArticlesAll());
+
+  return { props: { initialReduxState: reduxStore.getState()}};
 }

@@ -6,31 +6,23 @@ import ReactMarkdown from 'react-markdown'
 import s from '../styles/article.module.css'
 import {useForm} from "react-hook-form";
 import Head from "next/head";
-import { ArticlePage } from '../interfaces/articlePages'
-import { CommentArticle } from '../interfaces/commentArticle'
+import { useSelector, useDispatch } from "react-redux";
+import { initializeStore } from "../store";
+import { GetServerSideProps } from 'next'
+import { RootState } from '../store/reducers';
+import {addArticle} from "../store/article/action"
+import {CommentArticle} from "../store/article/types"
 
-interface ArticlesProps {
-    serverArticles: ArticlePage
-}
 
-export default function Article({serverArticles}: ArticlesProps ) {
 
-    const [article, setArticle] = React.useState<ArticlePage | null>(null)
+export default function Article( ) {
+
     const router = useRouter()
 
-    let loadArticles = () => {
-        fetch(`https://floating-ocean-73818.herokuapp.com/${router.query.id}`)
-            .then(response => response.json())
-            .then(data => setArticle(data[0]))
-    }
-    useEffect(() => {
-        if (!article  && serverArticles) {
-            setArticle(serverArticles[0])
-        } else if (!article  && !serverArticles) {
-            loadArticles()
-        }
-    },[])
-   
+    const dispatch = useDispatch();
+
+  const article = useSelector((state: RootState) => state.article.article )
+
 
     const [comment, setCom] = React.useState<CommentArticle>({})
 
@@ -113,7 +105,7 @@ export default function Article({serverArticles}: ArticlesProps ) {
                     </div>
                     }
                     {article.comments && article.comments.map(c =>
-                        <div className={s.blockComment}>
+                        <div key={c._id} className={s.blockComment}>
                             <span>
                             {c.author}
                                 <small>
@@ -133,9 +125,10 @@ export default function Article({serverArticles}: ArticlesProps ) {
 
 
 export async function getServerSideProps(router) {
-
-    const response = await fetch(`https://floating-ocean-73818.herokuapp.com/${router.query.id}`)
-    const serverArticles = await response.json()
-
-    return {props: {serverArticles}}
-}
+    const reduxStore = initializeStore();
+    const { dispatch } = reduxStore;
+  
+    await dispatch(addArticle(router.query.id));
+  
+    return { props: { initialReduxState: reduxStore.getState() } };
+  }

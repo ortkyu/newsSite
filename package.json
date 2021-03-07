@@ -5,14 +5,17 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npm run dev"
+    "start": "next start"
   },
   "dependencies": {
-    "next": "9.5.3",
+    "next": "^10.0.8",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^6.9.2",
-    "react-markdown": "^4.3.1"
+    "react-markdown": "^4.3.1",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
   },
   "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
   "main": "index.js",
