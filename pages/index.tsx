@@ -9,13 +9,14 @@ import { GetServerSideProps } from 'next'
 import { RootState } from '../store/reducers';
 import {addArticlesAll, addMoreArticlesAll} from "../store/articles/action"
 import {useRouter} from 'next/router'
-
+import {Article} from '../store/articles/types'
 
 export default function Index() {
   const dispatch = useDispatch();
   const router = useRouter()
 
   const newsArticles = useSelector((state: RootState) => state.articles.allArticles )
+
   const disableButton = useSelector((state: RootState) => state.articles.disableButtonMoreLoad )
 
 
@@ -30,19 +31,19 @@ export default function Index() {
 
   let [topArticles, ...allArticles] = newsArticles;
 
-  // if (newsArticles.length < 1) {
-  //   return (
-  //     <MainLayout>
-  //       <p>Подождите ...</p>
-  //     </MainLayout>
-  //   );
-  // }
+  if (newsArticles.length < 1) {
+    return (
+      <MainLayout>
+        <p>Подождите ...</p>
+      </MainLayout>
+    );
+  }
 
 
   return (
     <>
     <MainLayout>
-      {/* <Head>
+      <Head>
         <title>Новости из мира науки и техники</title>
         <meta
           name="description"
@@ -65,15 +66,12 @@ export default function Index() {
           itemProp="image"
           content="https://img2.akspic.ru/image/29690-struktura-kosmos-tehnologia-elektronnaya_tehnika-tehnologii-1920x1080.jpg"
         />
-      </Head> */}
-      {/* <noscript
+      </Head>
+      <noscript
         dangerouslySetInnerHTML={{
           __html: ` <div><img src="https://mc.yandex.ru/watch/68154151" style="position:absolute; left:-9999px;" alt="" /></div>`,
         }}
-      /> */}
-      {newsArticles.length < 1 ?  
-      <div>loading...</div>
-      :
+      />
       <div>
         <h1 className={s.tit}>Новости</h1>
         <div>
