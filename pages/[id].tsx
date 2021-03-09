@@ -119,7 +119,7 @@ export default function Article () {
                         </div>
                     )}
                 </div>
-            </div>}
+            </div>
         </MainLayout>
         </>
     )

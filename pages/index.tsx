@@ -115,7 +115,7 @@ export default function Index() {
             Еще статьи
           </button>
         </div>
-      </div>}
+      </div>
     </MainLayout>
     </>
   );
