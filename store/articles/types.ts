@@ -18,7 +18,7 @@ export interface Article  {
   
   interface AddArticlesAll {
     type: typeof ADD_ARTICLES_ALL
-    payload: Article[]
+    payload: Article[] | []
   }
 
   interface AddDisableButton {

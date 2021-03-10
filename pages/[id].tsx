@@ -21,8 +21,7 @@ export default function Article () {
 
     const dispatch = useDispatch();
 
-  const article = useSelector((state: RootState) => state.article.article )
-
+    const article = useSelector((state: RootState) => state.article.article )
 
     const [comment, setCom] = React.useState<CommentArticle>({})
 
@@ -34,7 +33,11 @@ export default function Article () {
         setCom({author, comment, commentDate})
         reset()
     }
-
+    useEffect(()=>{
+        if(!article) {
+          dispatch(addArticle())
+        }
+          },[]) 
     let commentDate = new Date().toLocaleDateString()
     let idAr = router.query.id
     const PostComment = async (author, comment) => {
@@ -130,7 +133,11 @@ export async function getServerSideProps(router) {
     const reduxStore = initializeStore();
     const { dispatch } = reduxStore;
   
-    await dispatch(addArticle(router.query.id));
-  
-    return { props: { initialReduxState: reduxStore.getState() } };
+   try {
+        await dispatch(addArticle(router.query.id));
+    return { props: { initialReduxState: reduxStore.getState() }}
+} catch(err) {
+    console.log(err);
+    return {props: {}}
+}
   }

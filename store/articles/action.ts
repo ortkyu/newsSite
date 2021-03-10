@@ -12,7 +12,13 @@ fetch(`https://floating-ocean-73818.herokuapp.com/`)
       type: ADD_ARTICLES_ALL,
       payload: data
     })
-  );
+  )
+  .catch(err=> {
+    console.log("fetchErr",err),  
+  dispatch({
+    type: ADD_ARTICLES_ALL,
+    payload: []
+  })})
 
 
 export const addMoreArticlesAll = (startId = 0): ThunkAction<void, RootState, unknown, Action<string>> => (dispatch) =>
@@ -28,6 +34,7 @@ fetch(`https://floating-ocean-73818.herokuapp.com/more${startId}`)
     dispatch({type: ADD_DISABLE_BUTTON})
           }
   }
-  );
+  )
+  .catch(err=> console.log("fetchErr",err) )
 
     
